@@ -1,0 +1,25 @@
+body{
+    background-image:url(image.jpg);
+}
+.form-holder{
+    margin-top:20%;
+    margin-bottom:20%;
+}
+.card-body{
+    background-image: linear-gradient(to right, rgba(5, 206, 252, 0.987), rgba(255,0,0,1));
+    /* height: 50px; */
+}
+.form-control{
+    padding: 2%;
+}
+
+.btn-link {
+    font-weight: 400;
+    color: #ffffff;
+    text-decoration: none;
+}
+a {
+    color: #7dfb06;
+    text-decoration: none;
+    background-color: transparent;
+}
