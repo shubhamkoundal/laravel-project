@@ -50,6 +50,12 @@
                                 <p class="text-danger">{{ $errors->first('Confirm password') }}</p>
                             @endif   
                         </div> 
+                        <div class="form-group">  
+                          <input type="file" name="file"/>
+                            @if($errors->has('file'))
+                              <p class="text-danger">{{ $errors->first('file') }}</p>
+                            @endif   
+                         </div> 
 
                         <div class="row">
                             <div class="col-8 text-left">

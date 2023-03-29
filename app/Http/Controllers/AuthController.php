@@ -31,7 +31,8 @@ class AuthController extends Controller
         $request->validate([
             'name'=>'required',
             'email'=>'required|unique:users|email',
-            'password'=>'required|confirmed'
+            'password'=>'required|confirmed',
+            // 'file' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
     
         User::create([
