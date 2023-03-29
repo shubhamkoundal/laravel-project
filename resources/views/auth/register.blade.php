@@ -11,7 +11,7 @@
                         <p class="text-danger">{{ Session::get('error') }}</p>
                     @endif
 
-                    <form action="{{ route('register') }}" method="post">
+                    <form action="{{ route('register') }}"  method="post">
                         @csrf
                         @method('post') 
 
@@ -50,12 +50,12 @@
                                 <p class="text-danger">{{ $errors->first('Confirm password') }}</p>
                             @endif   
                         </div> 
-                        <div class="form-group">  
-                          <input type="file" name="file"/>
-                            @if($errors->has('file'))
-                              <p class="text-danger">{{ $errors->first('file') }}</p>
+                        <!-- <div class="form-group">  
+                          <input type="file" name="avatar"/>
+                            @if($errors->has('avatar'))
+                              <p class="text-danger">{{ $errors->first('avatar') }}</p>
                             @endif   
-                         </div> 
+                         </div>  -->
 
                         <div class="row">
                             <div class="col-8 text-left">
