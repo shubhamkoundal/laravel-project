@@ -34,9 +34,11 @@
                             @endif   
                         </div> 
                         <div class="row">
-                            <div class="col-8 text-left">
-                                <a href="#" class="btn btn-link">Forgot password</a>
-                            </div>
+                          <div class="col-8 text-left">
+                            <a href="{{ route('password.request') }}" class="btn btn-link">Forgot password</a>
+                          </div>
+                        </div>
+
                             <div class="col-4 text-right">
                                 <input type="submit" class="btn btn-primary" value="login"/>
                             </div>

@@ -50,17 +50,6 @@
                                 <p class="text-danger">{{ $errors->first('Confirm password') }}</p>
                             @endif   
                         </div> 
-                        <!-- <div class="form-group">  
-                          <input type="file" name="avatar"/>
-                            @if($errors->has('avatar'))
-                              <p class="text-danger">{{ $errors->first('avatar') }}</p>
-                            @endif   
-                         </div>  -->
-
-                        <div class="row">
-                            <div class="col-8 text-left">
-                                <a href="#" class="btn btn-link">Forgot password</a>
-                            </div>
                             <div class="col-4 text-right">
                                 <input type="submit" class="btn btn-primary" value="Register"/>
                             </div>

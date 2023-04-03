@@ -23,3 +23,6 @@ a {
     text-decoration: none;
     background-color: transparent;
 }
+.text-success {
+    color: #f5f8f5!important;
+}

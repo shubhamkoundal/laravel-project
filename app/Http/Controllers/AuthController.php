@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Mail;
+
 use App\Models\User;
 
 class AuthController extends Controller
@@ -29,26 +32,22 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:users|email',
-            'password' => 'required|confirmed',
-            // 'avatar' => 'required',
-        ]);
+public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|unique:users|email',
+        'password' => 'required|confirmed',
+    ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+    ]);
+    Mail::to($user->email)->send(new WelcomeEmail($user));
+    return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
+}
 
-        // $avatarPath = $request->file('avatar')->store('avatars');
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => \Hash::make($request->password),
-            // 'avatar' => $avatarPath,
-        ]);
-
-        return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to  login.');
-    }
 
     public function home()
     {
