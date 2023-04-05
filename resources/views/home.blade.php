@@ -6,7 +6,7 @@
         {{ session('success') }}
     </div>
 @endif
-<h1>Dashboard</h1>
+<h1> User Dashboard</h1>
  Name: {{Auth::user()->name}}
  <br>
 E-mail {{Auth::user()->email}}

@@ -6,7 +6,7 @@ body{
     margin-bottom:20%;
 }
 .card-body{
-    background-image: linear-gradient(to right, rgba(5, 206, 252, 0.987), rgba(255,0,0,1));
+    background-image: linear-gradient(to right, rgba(5, 206, 252, 0.987), rgb(34, 255, 0));
     /* height: 50px; */
 }
 .form-control{

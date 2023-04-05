@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             // $table->string('avatar');
+            $table->boolean('is_admin')->default(false);
             // $table->string('avatar')->nullable();
             // $table->string('phone')->after('email');
             $table->rememberToken();
@@ -32,5 +33,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        $table->dropColumn('is_admin');
     }
 };

@@ -17,16 +17,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::group(['middleware'=>'guest'],function(){
-
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::get('register', [AuthController::class, 'register_view'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('register');
 });
-Route::group(['middleware'=>'auth'],function(){
-Route::get('home', [AuthController::class, 'home'])->name('home');
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('admin/dashboard', [AuthController::class ,'adminDashboard'])->name('admin.dashboard');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [AuthController::class, 'home'])->name('home');
+});
+
+
+
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 // Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 
