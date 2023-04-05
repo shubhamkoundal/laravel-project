@@ -50,6 +50,17 @@
                                 <p class="text-danger">{{ $errors->first('Confirm password') }}</p>
                             @endif   
                         </div> 
+                        <div class="form-group row">
+                           <div class="col-md-6 offset-md-4">
+                               <div class="form-check">
+                                 <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin">
+
+                                   <label class="form-check-label" for="is_admin">
+                                     {{ __('Register as admin') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                             <div class="col-4 text-right">
                                 <input type="submit" class="btn btn-primary" value="Register"/>
                             </div>

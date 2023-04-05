@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UsersExport;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,10 +26,13 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [AuthController::class ,'adminDashboard'])->name('admin.dashboard');
 });
+Route::post('/users/{user}/make-admin', [AuthController::class, 'makeAdmin'])->name('make-admin');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [AuthController::class, 'home'])->name('home');
 });
+// Route::get('/download', [AuthController::class,'download'])->name('download');
+
 
 
 
