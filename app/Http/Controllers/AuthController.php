@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\AuthController;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Pagination\Paginator;
+use PDF;
 
 
 use App\Models\User;
@@ -42,6 +44,17 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+    // public function register_view($from_admin = false)
+    // {
+    //     if ($from_admin) {
+    //         session(['register_from_admin' => true]);
+    //     } else {
+    //         session()->forget('register_from_admin');
+    //     }
+    //     return view('auth.register', ['from_admin' => $from_admin]);
+    // }
+    
+
 
     public function register(Request $request)
     {
@@ -63,8 +76,13 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
+{
+    $users = User::paginate(4); // paginated query
+
+    return view('admin.dashboard', compact('users'));
+}
+
         $users = User::all();
-    return view('admin.dashboard', ['users' => $users]);
     }
 
     public function home()
@@ -80,6 +98,26 @@ class AuthController extends Controller
     
         return redirect()->back()->with('success', 'User has been made an admin!');
     }
+    public function exportPDF()
+    {
+       $users = User::all();
+       $pdf = PDF::loadView('admin.export-pdf', compact('users'));
+       return $pdf->download('admin-data.pdf');
+   }
+   public function deleteUser(Request $request, $id)
+   {
+       $user = User::find($id);
+       if ($user) {
+           $user->delete();
+           return redirect()->back()->with('success', 'User has been deleted!');
+       } else {
+           return redirect()->back()->with('error', 'User not found.');
+       }
+   }
+   
+
+
+
     
     public function logout()
     {
