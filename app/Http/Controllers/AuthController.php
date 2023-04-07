@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Mail\WelcomeEmail;
-use Illuminate\Support\Facades\Mail;
-use App\Http\Controllers\AuthController;
 use App\Exports\UsersExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\WelcomeEmail;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
-
-use App\Models\User;
-
-class AuthController extends Controller
+class AuthController extends Controller 
 {
     public function index()
     {
         return view('auth.login');
-        
     }
 
     public function login(Request $request)
     {
         $request->validate([
             'email' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if (\Auth::attempt($request->only('email', 'password'))) {
@@ -44,17 +41,6 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
-    // public function register_view($from_admin = false)
-    // {
-    //     if ($from_admin) {
-    //         session(['register_from_admin' => true]);
-    //     } else {
-    //         session()->forget('register_from_admin');
-    //     }
-    //     return view('auth.register', ['from_admin' => $from_admin]);
-    // }
-    
-
 
     public function register(Request $request)
     {
@@ -68,7 +54,6 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'is_admin' => 0,
-
         ]);
         Mail::to($user->email)->send(new WelcomeEmail($user));
         return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
@@ -76,13 +61,8 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
-{
-    $users = User::paginate(4); // paginated query
-
-    return view('admin.dashboard', compact('users'));
-}
-
-        $users = User::all();
+        $users = User::paginate(4); // paginated query
+        return view('admin.dashboard', compact('users'));
     }
 
     public function home()
@@ -95,30 +75,43 @@ class AuthController extends Controller
     {
         $user->is_admin = true;
         $user->save();
-    
         return redirect()->back()->with('success', 'User has been made an admin!');
     }
+
     public function exportPDF()
     {
-       $users = User::all();
-       $pdf = PDF::loadView('admin.export-pdf', compact('users'));
-       return $pdf->download('admin-data.pdf');
-   }
-   public function deleteUser(Request $request, $id)
-   {
-       $user = User::find($id);
-       if ($user) {
-           $user->delete();
-           return redirect()->back()->with('success', 'User has been deleted!');
-       } else {
-           return redirect()->back()->with('error', 'User not found.');
-       }
-   }
-   
+        $users = User::all();
+        $pdf = PDF::loadView('admin.export-pdf', compact('users'));
+        return $pdf->download('admin-data.pdf');
+    }
 
+    public function deleteUser(Request $request, $id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $user->delete();
+            return redirect()->back()->with('success', 'User has been deleted!');
+        } else {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+    }
 
+    public function showUser(User $user)
+    {
+        return view('admin.user-details', compact('user'));
+    }
 
-    
+    public function download()
+    {
+        $users = User::all();
+        return Excel::download(new UsersExport, 'users.xlsx');
+    }
+
+    public function collection()
+    {
+        return User::all();
+    }
+
     public function logout()
     {
         \Session::flush();

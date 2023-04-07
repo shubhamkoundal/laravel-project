@@ -32,15 +32,20 @@ Route::post('/users/{user}/make-admin', [AuthController::class, 'makeAdmin'])->n
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [AuthController::class, 'home'])->name('home');
+    Route::get('/download', [AuthController::class,'download'])->name('download');
+    // Route::get('/download', [AuthController::class,'download'])->name('download');
+    Route::get('/admin/export-pdf', [AuthController::class, 'exportPdf'])->name('admin.export-pdf');
+    // Route::delete('/admin/users/{id}', 'AuthController@deleteUser')->name('admin.users.delete');
+    Route::delete('/users/{id}', [AuthController::class ,'deleteUser'])->name('delete-user');
+    // Route::put('/users/{user}', [AuthController::class,'update'])->name('update-user');
+    // Route::put('/users/{id}', [App\Http\Controllers\AdminController::class, 'update'])->name('admin.users.update');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('update-user');
+    Route::get('/admin/users/{user}', [AuthController::class,'showUser'])->name('admin.users.show');
+    Route::get('/users/export', [UserController::class, 'export'])->name('users.export');
+
+
+    
 });
-Route::get('/download', [AuthController::class,'download'])->name('download');
-// Route::get('/download', [AuthController::class,'download'])->name('download');
-Route::get('/admin/export-pdf', [AuthController::class, 'exportPdf'])->name('admin.export-pdf');
-// Route::delete('/admin/users/{id}', 'AuthController@deleteUser')->name('admin.users.delete');
-Route::delete('/users/{id}', [AuthController::class ,'deleteUser'])->name('delete-user');
-// Route::put('/users/{user}', [AuthController::class,'update'])->name('update-user');
-// Route::put('/users/{id}', [App\Http\Controllers\AdminController::class, 'update'])->name('admin.users.update');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('update-user');
 
 
 

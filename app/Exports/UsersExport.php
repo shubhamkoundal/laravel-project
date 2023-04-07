@@ -1,25 +1,18 @@
 <?php
+namespace App\Http\Controllers;
 namespace App\Exports;
 
-use App\Models\User;
+use App\User;
+use App\Exports\UsersExport;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\ExcelServiceProvider;
 
-
-class UsersExport implements FromCollection, WithHeadings
+class UsersExport implements FromCollection
 {
+    /**
+    * @return \Illuminate\Support\Collection
+    */
     public function collection()
     {
-        return User::select('name', 'email', 'created_at')->get();
+        return User::all();
     }
-
-    public function headings(): array
-    {
-        return [
-            'Name',
-            'Email',
-            'Registration Date',
-        ];
-    }
-} 
+}

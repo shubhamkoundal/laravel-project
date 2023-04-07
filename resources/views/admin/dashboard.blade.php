@@ -29,16 +29,23 @@
         <td>{{ $user->email }}</td>
         <td>{{ $user->created_at->format('Y-m-d') }}</td>
         <td>{{ $user->is_admin ? 'Yes' : 'No' }}</td>
-        <td>
+        <td class="d-flex justify-content-between">
             @if (!$user->is_admin)
                 <form method="POST" action="{{ route('make-admin', $user->id) }}">
                     @csrf
-                    <button type="submit" class="btn btn-primary">Make Admin</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-user-shield"></i></button>
                 </form>
                 <form method="POST" action="{{ route('delete-user', $user->id) }}" class="d-inline">
                    @csrf
                    @method('DELETE')
-                  <a href="#" class="btn btn-danger" onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this user?')) { this.parentNode.submit(); }">Delete User</a>
+                   <a href="#" class="btn btn-danger" onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this user?')) { this.parentNode.submit(); }">
+                     <i class="fa fa-trash"></i>
+                    </a>
+
+                    <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary">
+                      <i class="fas fa-eye"></i> <!-- replace with the desired icon -->
+                    </a>
+
                 </form>
                 
 
