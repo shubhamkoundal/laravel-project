@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -11,64 +12,92 @@
                         <p class="text-danger">{{ Session::get('error') }}</p>
                     @endif
 
-                    <form action="{{ route('register') }}"  method="post">
+                    <form id="register-form" action="{{ route('register') }}" method="post">
                         @csrf
-                        @method('post') 
+                        @method('post')
 
-                        <div class="form-group">  
-                            <!-- <label>Name</label> -->
+                        <div class="form-group">
                             <input type="name" name="name" class="form-control" placeholder="Name"/>
 
                             @if($errors->has('name'))
                                 <p class="text-danger">{{ $errors->first('name') }}</p>
-                            @endif   
-                        </div> 
+                            @endif
+                        </div>
 
-                        <div class="form-group">  
-                            <!-- <label>Email</label> -->
+                        <div class="form-group">
                             <input type="email" name="email" class="form-control" placeholder="Email"/>
 
                             @if($errors->has('email'))
                                 <p class="text-danger">{{ $errors->first('email') }}</p>
-                            @endif   
-                        </div> 
+                            @endif
+                        </div>
 
-                        <div class="form-group">  
-                            <!-- <label>Password</label> -->
+                        <div class="form-group">
                             <input type="password" name="password" class="form-control" placeholder="Password"/>
 
                             @if($errors->has('password'))
                                 <p class="text-danger">{{ $errors->first('password') }}</p>
-                            @endif   
-                        </div> 
+                            @endif
+                        </div>
 
-                        <div class="form-group">  
-                            <!-- <label>Confirm password</label> -->
+                        <div class="form-group">
                             <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password"/>
 
                             @if($errors->has('Confirm password'))
                                 <p class="text-danger">{{ $errors->first('Confirm password') }}</p>
-                            @endif   
-                        </div> 
-                        <div class="form-group row">
-                           <div class="col-md-6 offset-md-4">
-                               <div class="form-check">
-                                 <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin">
+                            @endif
+                        </div>
 
-                                   <label class="form-check-label" for="is_admin">
-                                     {{ __('Register as admin') }}
+                        <div class="form-group row">
+                            <div class="col-md-6 offset-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin">
+                                    <label class="form-check-label" for="is_admin">
+                                        {{ __('Register as admin') }}
                                     </label>
                                 </div>
                             </div>
                         </div>
-                            <div class="col-4 text-right">
-                                <input type="submit" class="btn btn-primary" value="Register"/>
+
+                        <div class="form-group row">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Register') }}
+                                </button>
                             </div>
-                        </div> 
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(function() {
+        $('#register-form').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function(data) {
+                    if (data.success) {
+                        window.location.href = "{{ route('login') }}";
+                    } else {
+                        alert('Registration failed.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Registration failed. Error: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
 @endsection
+    

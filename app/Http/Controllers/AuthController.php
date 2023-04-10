@@ -6,6 +6,7 @@ use App\Exports\UsersExport;
 use App\Mail\WelcomeEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
+// use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -42,26 +43,50 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    // public function register(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|unique:users|email',
+    //         'password' => 'required|confirmed',
+    //     ]);
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'password' => bcrypt($request->password),
+    //         'is_admin' => 0,
+    //     ]);
+    //     Mail::to($user->email)->send(new WelcomeEmail($user));
+    //     return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
     public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:users|email',
-            'password' => 'required|confirmed',
-        ]);
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'is_admin' => 0,
-        ]);
-        Mail::to($user->email)->send(new WelcomeEmail($user));
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|unique:users|email',
+        'password' => 'required|confirmed',
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'is_admin' => $request->input('is_admin') ? 1 : 0, 
+    ]);
+
+    Mail::to($user->email)->send(new WelcomeEmail($user));
+
+    if ($request->ajax()) {
+        return response()->json(['success' => true, 'message' => 'Registration Successful. Please Enter Your Email and password to login.']);
+    } else {
         return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
     }
+} 
+
+
 
     public function adminDashboard()
     {
-        $users = User::paginate(4); // paginated query
+        $users = User::paginate(4); 
         return view('admin.dashboard', compact('users'));
     }
 

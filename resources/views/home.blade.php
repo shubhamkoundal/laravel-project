@@ -11,4 +11,5 @@
  <br>
 E-mail {{Auth::user()->email}}
 
+
 @endsection
