@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Image</th>
             <th>Name</th>
             <th>Email</th>
             <th>Created At</th>
@@ -25,6 +26,14 @@
     <tbody>
     @foreach ($users as $user)
     <tr>
+    <td>
+    @if($user->avatar && file_exists(public_path('avatars/' . $user->avatar)))
+                <img src="{{ asset('avatars/' . $user->avatar) }}" alt="Avatar" width="100" height="100">
+            @else
+                <img src="{{ asset('avatars/default-avatar.png') }}" alt="{{ $user->name }}'s Avatar" width="100" height="100">
+            @endif
+</td>
+
         <td>{{ $user->name }}</td>
         <td>{{ $user->email }}</td>
         <td>{{ $user->created_at->format('Y-m-d') }}</td>
@@ -42,10 +51,6 @@
                      <i class="fa fa-trash"></i>
                     </a>
 
-                    <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary">
-                      <i class="fas fa-eye"></i> <!-- replace with the desired icon -->
-                    </a>
-
                 </form>
                 
 
@@ -61,7 +66,5 @@
 {{ $users->links() }}
 <a href="{{ route('download') }}" class="btn btn-success">Download as Excel</a>
 <a href="{{ route('admin.export-pdf') }}" class="btn btn-success">Export to PDF</a>
-
-
 
 @endsection

@@ -12,7 +12,7 @@
                         <p class="text-danger">{{ Session::get('error') }}</p>
                     @endif
 
-                    <form id="register-form" action="{{ route('register') }}" method="post">
+                    <form id="register-form" method="POST" action="/register" enctype="multipart/form-data">
                         @csrf
                         @method('post')
 
@@ -58,6 +58,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                          <label for="avatar">Avatar Image</label>
+                          <input id="avatar" type="file" class="form-control @error('avatar') is-invalid @enderror" name="avatar" accept="image/*">
+                           @error('avatar')
+                                <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
 
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">

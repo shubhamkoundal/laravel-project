@@ -38,4 +38,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/users/{user}', [AuthController::class,'showUser'])->name('admin.users.show');
     Route::get('/users/export', [UserController::class, 'export'])->name('users.export');    
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/admin/upload-avatar', [AuthController::class,'uploadAvatar'])->name('admin.upload-avatar');
+    Route::get('/scraper', [App\Http\Controllers\AuthController::class, 'scraper'])->name('scraper');
+
+
 });

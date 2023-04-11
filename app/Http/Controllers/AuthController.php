@@ -12,9 +12,26 @@ use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use Goutte\Client;
 
 class AuthController extends Controller 
 {
+    // private $results = array();
+
+    // public function scraper()
+    // {
+    //     $client = new Client();
+    //     $url = 'http://www.worldometers.info/coronavirus/';
+    //     $page = $client->request('GET', $url);
+
+    //     $page->filter('#maincounter-wrap')->each(function ($item) {
+    //         $this->results[$item->filter('h1')->text()] = $item->filter('.maincounter-number')->text();
+    //     });
+
+    //     $data = $this->results;
+
+    //     return view('scraper', compact('data'));
+    // }
     public function index()
     {
         return view('auth.login');
@@ -59,29 +76,41 @@ class AuthController extends Controller
     //     Mail::to($user->email)->send(new WelcomeEmail($user));
     //     return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
     public function register(Request $request)
-{
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|unique:users|email',
-        'password' => 'required|confirmed',
-    ]);
-
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => bcrypt($request->password),
-        'is_admin' => $request->input('is_admin') ? 1 : 0, 
-    ]);
-
-    Mail::to($user->email)->send(new WelcomeEmail($user));
-
-    if ($request->ajax()) {
-        return response()->json(['success' => true, 'message' => 'Registration Successful. Please Enter Your Email and password to login.']);
-    } else {
-        return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|confirmed',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $user = new User([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'is_admin' => $request->input('is_admin') ? 1 : 0,
+        ]);
+    
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar')->store('public/avatars');
+            $user->avatar = $avatar;
+        } else {
+            $user->avatar = 'public/avatars/default-avatar.png'; // set a default avatar image
+        }
+        
+        $user->save();
+    
+        Mail::to($user->email)->send(new WelcomeEmail($user));
+    
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Registration Successful. Please Enter Your Email and password to login.']);
+        } else {
+            return redirect('login')->with('success', 'Registration Successful. Please Enter Your Email and password to login.');
+        }
     }
-} 
+    
 
+    
 
 
     public function adminDashboard()
@@ -91,10 +120,20 @@ class AuthController extends Controller
     }
 
     public function home()
-    {
-        $users = User::all();
-        return view('home', compact('users'));
-    }
+{
+    $client = new Client();
+    $url = 'http://www.worldometers.info/coronavirus/';
+    $page = $client->request('GET', $url);
+
+    $page->filter('#maincounter-wrap')->each(function ($item) {
+        $this->results[$item->filter('h1')->text()] = $item->filter('.maincounter-number')->text();
+    });
+
+    $data = $this->results;
+
+    $users = User::all();
+    return view('home', compact('users', 'data'));
+}
 
     public function makeAdmin(User $user)
     {
